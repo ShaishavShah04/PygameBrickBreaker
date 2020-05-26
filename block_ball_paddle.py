@@ -15,7 +15,13 @@ class Block(Sprite):
     def checkCollision(self, ball):
         if self.sprite.get_rect(x=self.x, y=self.y).colliderect(ball.getSprite().get_rect(x=ball.getX(), y=ball.getY())):
             self.hit = True
-            return self.hit
+        # Find border which it touched... Since ball could bounce either vertical or horizontal
+            if ball.getX() == (self.getX() + self.getWidth()) or (ball.getX() + ball.getWidth()) == self.getX():
+                # horizontal bounce ^
+                return 1# "1" means horizontal
+            else:
+                return 2
+
 
 
 class Ball(Sprite):
@@ -96,16 +102,23 @@ if __name__ == "__main__":
     ball = Ball(window,5)
     ball.setPOS(200,200)
     block = Block(window,50,100)
+    block.setPOS(550,500)
     paddle = Paddle(window,GREEN)
+    bounce = 0
+
 
     while True:
         window.getEvents()
         #
         ball.bouncearound(window)
         if not block.hit:
-            if block.checkCollision(ball):
-                ball.bounceonce()
-                print("True")
+            bounce = block.checkCollision(ball)
+            if block.hit:
+                if bounce == 1:
+                    ball.bouncehorizontal()
+                else:
+                    ball.bouncevertical()
+
         paddle.move(window.getKeys())
         if paddle.checkCollision(ball):
             ball.bouncevertical()

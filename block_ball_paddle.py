@@ -2,6 +2,8 @@
 # Shaishav Shah
 from window import Window
 from sprite import Sprite
+from pygame import K_a, K_d
+from loader import GREEN
 
 class Block(Sprite):
     def __init__(self,window,height,width):
@@ -9,7 +11,7 @@ class Block(Sprite):
         self.setDimensions(width,height)
         self.hit = False
 
-    # ---
+    # -- Getter Method
     def checkCollision(self, ball):
         if self.sprite.get_rect(x=self.x, y=self.y).colliderect(ball.getSprite().get_rect(x=ball.getX(), y=ball.getY())):
             self.hit = True
@@ -44,31 +46,42 @@ class Ball(Sprite):
         #
         self.pos = (self.x, self.y)
 
-    def bounceonce(self):
+    def bouncehorizontal(self):
         self.dirX *= -1
+
+    def bouncevertical(self):
         self.dirY *= -1
 
+    def bounceboth(self):
+        self.bouncevertical()
+        self.bouncehorizontal()
+
+
 class Paddle(Sprite):
-    def __init__(self,x,y,color):
-        Sprite.__init__(self,window,x,y,color)
+    def __init__(self, window,color):
+        Sprite.__init__(self,window,color=color)
         self.speed = 10
+        self.setDimensions(100,10)
+        self.setPOS(self.window.getWidth()/2 - self.getWidth()/2, self.window.getHeight() - (2 * self.height))
 
     # -- Modify Methods
 
-    def move(self,window,keys):
+    def move(self,keys):
 
         if keys[K_d] == 1:
             self.x += self.speed
         if keys[K_a] == 1:
             self.x -= self.speed
 
-        if self.x > window.getWidth() - self.sprite.get_rect().width:
-            self.x = window.GgetHeight() - self.sprite.get_rect().width
+        if self.x > self.window.getWidth() - self.sprite.get_rect().width:
+            self.x = self.window.getWidth() - self.sprite.get_rect().width
         elif self.x < 0:
             self.x = 0
 
         self.pos = (self.x, self.y)
 
+    def checkCollision(self,ball):
+        return self.sprite.get_rect(x=self.x, y=self.y).colliderect(ball.getSprite().get_rect(x=ball.getX(), y=ball.getY()))
 
 
 
@@ -83,17 +96,23 @@ if __name__ == "__main__":
     ball = Ball(window,5)
     ball.setPOS(200,200)
     block = Block(window,50,100)
+    paddle = Paddle(window,GREEN)
 
     while True:
         window.getEvents()
+        #
         ball.bouncearound(window)
-        if block.hit != True:
+        if not block.hit:
             if block.checkCollision(ball):
                 ball.bounceonce()
                 print("True")
+        paddle.move(window.getKeys())
+        if paddle.checkCollision(ball):
+            ball.bouncevertical()
 
         window.clearscreen()
-        if block.hit != True:
+        if not block.hit:
             window.blitSprite(block)
+        window.blitSprite(paddle)
         window.blitSprite(ball)
         window.updatescreen()

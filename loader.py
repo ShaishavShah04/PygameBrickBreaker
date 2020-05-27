@@ -9,7 +9,7 @@ TITLE = "Brick Breakout!"
 FPS = 30
 WIDTH = 800
 HEIGHT = 600
-
+LIVES = 3
 # Colors
 
 WHITE = (255,255,255)
@@ -20,3 +20,6 @@ ORANGE = (255,111,0)
 YELLOW = (255,222,0)
 GREEN = (0,255,0)
 BLUE = (0,0,255)
+PURPLE = (200,0,255)
+
+blockcolors = (RED,ORANGE,YELLOW,GREEN,BLUE,PURPLE)

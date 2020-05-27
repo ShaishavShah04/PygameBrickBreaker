@@ -36,6 +36,7 @@ class Sprite:
 
     def setColor(self,color):
         self.color = color
+        self.updateSprite()
 
     def setDimensions(self,w,h):
         self.width = w

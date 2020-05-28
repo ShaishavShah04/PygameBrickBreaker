@@ -105,7 +105,7 @@ class Game:
 
 
                     for block in self.onscreen:
-                        bounce = block.checkCollision(self.ball)
+                        bounce = block.checkCollision2(self.ball)
                         if block.hit:
                             self.score.addtoValue()
                             if bounce == 1:

@@ -2,7 +2,7 @@
 # Shaishav Shah
 from window import Window
 from sprite import Sprite
-from pygame import K_a, K_d
+import pygame
 from loader import GREEN
 from random import randrange
 
@@ -32,6 +32,40 @@ class Block(Sprite):
                 print("Top/bottom")
                 return 2
 
+    def checkCollision2(self,ball):
+
+
+        # Collisions
+        if self.getRect().colliderect(ball.getRect()): # If any overlap between block and ball
+
+            # Variables inside if-statement to save memory
+            t_l = (ball.getX(), ball.getY())  # Top left corner
+            t_r = (ball.getX() + ball.getWidth(), ball.getY())
+            b_r = (ball.getX() + ball.getWidth(), ball.getY() + ball.getHeight())
+            b_l = (ball.getX(), ball.getY() + ball.getHeight())
+            # Collision testing
+            if t_l[0] >= (self.getX() + self.getWidth() - 5) and b_l[0] >= (self.getX() + self.getWidth() - 5) and t_l[1] <= (self.getY()+ self.getHeight()+5) and b_l[1] >= (self.getY() - 5): # Left edge collision
+                print("Left")
+                return 1
+            elif t_r[0] <= (self.getX()+5) and b_r[0] <= (self.getX()+5) and t_r[1] <= (self.getY()+ self.getHeight()+5) and b_r[1] >= (self.getY() - 5):
+                print("Right")
+                return 1
+            else:
+                print("Top or bottom")
+                return 2
+
+
+
+
+
+
+
+
+
+
+
+
+
     # -- Getter Method
     def checkHit(self):
         return self.hit
@@ -44,7 +78,54 @@ class Ball(Sprite):
         self.setDimensions(size,size)
         self.dirX = randrange(-1,2,2)
         self.dirY = randrange(-1,2,2)
-        self.speed = 5
+        self.speed = 1
+
+    def moveWASD(self,keypresses):
+        if keypresses[pygame.K_d] == 1:
+            self.x += self.speed
+        if keypresses[pygame.K_a] == 1:
+            self.x -= self.speed
+
+        if keypresses[pygame.K_w] == 1:
+            self.y -= self.speed
+        if keypresses[pygame.K_s] == 1:
+            self.y += self.speed
+
+        # chk x
+        if self.x > self.window.getWidth() - self.sprite.get_rect().width:
+            self.x = self.window.getWidth() - self.sprite.get_rect().width
+        elif self.x < 0:
+            self.x = 0
+
+        # Chk y
+        if self.y > self.window.getHeight() - self.sprite.get_rect().height:
+            self.y = self.window.getHeight() - self.sprite.get_rect().height
+        elif self.y < 0:
+            self.y = 0
+        self.pos = (self.x, self.y)
+
+    def bounceEverywhere(self, frame):
+        self.x += self.DirX * self.spd
+        self.y += self.DirY * self.spd
+        #
+        if self.x > frame.GetVW() - self.width:
+            self.x = frame.GetVW() - self.width
+            self.DirX = -1
+        elif self.x < 0:
+            self.x = 0
+            self.DirX = 1
+        #
+        if self.y > frame.GetVH() - self.height:
+            self.y = frame.GetVH() - self.height
+            self.DirY = -1
+        elif self.y < 0:
+            self.y = 0
+            self.DirY = 1
+        #
+        self.pos = (self.x, self.y)
+
+
+
 
     def bouncearound(self,bounce):
 
@@ -97,9 +178,9 @@ class Paddle(Sprite):
 
     def move(self,keys):
 
-        if keys[K_d] == 1:
+        if keys[pygame.K_d] == 1:
             self.x += self.speed
-        if keys[K_a] == 1:
+        if keys[pygame.K_a] == 1:
             self.x -= self.speed
 
         if self.x > self.window.getWidth() - self.sprite.get_rect().width:
@@ -122,8 +203,8 @@ if __name__ == "__main__": # Confirming stuff works with one block
     init()
 
     window = Window()
-    ball = Ball(window,5)
-    ball.setPOS(200,200)
+    ball = Ball(window,10)
+    ball.setPOS(700,400)
     block = Block(window,50,100)
     block.setPOS(550,500)
     paddle = Paddle(window,GREEN)
@@ -133,16 +214,17 @@ if __name__ == "__main__": # Confirming stuff works with one block
     while True:
         window.getEvents()
         #
-        ball.bouncearound()
+        ball.moveWASD(window.getKeys())
+        #bounce = ball.bouncearound(bounce)
         if not block.hit:
-            bounce = block.checkCollision(ball)
+            block.checkCollision2(ball)
             if block.hit:
                 if bounce == 1:
                     ball.bouncehorizontal()
                 else:
                     ball.bouncevertical()
 
-        paddle.move(window.getKeys())
+        # paddle.move(window.getKeys())
         if paddle.checkCollision(ball):
             ball.bouncevertical()
 

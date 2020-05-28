@@ -61,6 +61,9 @@ class Sprite:
     def getSprite(self):
         return self.sprite
 
+    def getRect(self):
+        return self.sprite.get_rect(x=self.x, y=self.y)
+
     def getPOS(self):
         return self.pos
 

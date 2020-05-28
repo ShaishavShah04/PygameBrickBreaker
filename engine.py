@@ -3,6 +3,8 @@
 """
 Engine for gluing all the things togather... This will also incorporate levels
 """
+from typing import List
+
 from window import Window
 from block_ball_paddle import Block, Ball, Paddle
 from text import Text
@@ -10,9 +12,9 @@ from loader import *
 from pygame import K_SPACE
 
 class Game:
+
     def __init__(self):
         # Variables
-        self.gameon = True
         self.window = Window()
         self.onscreen = []
         # Text and Positions
@@ -27,7 +29,8 @@ class Game:
         self.halt.setPOS(self.window.getWidth()/2 - self.halt.getWidth() - 50, self.window.getHeight()/2 - self.halt.getHeight()/2)
         self.gameover = Text("Game Over!",self.window,fontsize=36)
         self.gameover.setPOS(self.window.getWidth() / 2 - self.gameover.getWidth()/2 - 20 ,self.window.getHeight() / 2 - self.gameover.getHeight() / 2)
-
+        self.nextlevel = Text("Press Space for next level",self.window)
+        self.nextlevel.setPOS(self.window.getWidth()/2 - self.nextlevel.getWidth() , self.window.getHeight() - (2*self.nextlevel.getHeight()))
         # Creating Blocks
         for i in range(6):
             for j in range(6):
@@ -36,7 +39,8 @@ class Game:
                 self.onscreen.append(Block(self.window,50,100))
                 self.onscreen[-1].setPOS(temp_starting + (j * 105) ,60 + (i*55))
                 self.onscreen[-1].setColor(blockcolors[i])
-
+        # Back up array with blocks
+        self.array_backup = self.onscreen[:]
         # Creating sprites
         self.ball = Ball(self.window, 15)
         self.ball.setmiddle() # setting ball in starting spot
@@ -51,14 +55,13 @@ class Game:
             self.misc.pop()
             self.level.addtoValue()
 
-
-
-
     def run(self):
         ## Var
         halt = False
-
-        while self.gameon:
+        max_move = 5
+        move = [-1,1]
+        next_level = False
+        while True:
             ## Variables
             bounce = 0
             ## Inputs
@@ -77,7 +80,18 @@ class Game:
                         self.ball.randomdirection()
                         self.misc = [self.ball, self.player, self.title, self.level,self.score,self.lives]
                         halt = False
+                elif next_level:
+                    self.misc = [self.ball, self.player, self.title, self.level,self.score,self.lives, self.nextlevel]
+                    if self.chkspace(self.window.getKeys()):
+                        self.ball.randomdirection()
+                        self.misc.pop()
+                        next_level = False
                 else:
+                    # Move blocks around for level 2
+                    if self.level.getvalue() >= 2:
+                        for block in self.onscreen:
+                            block.blockmoves(self.level.getvalue(),move[(max_move//10)%2])
+                        max_move += 1
 
                     # Bounce and checking for losing a life
                     bounce = self.ball.bouncearound(bounce)
@@ -103,8 +117,13 @@ class Game:
                         if block.checkHit():
                             self.onscreen.remove(block)
 
-                    if len(self.onscreen)==0: #
+                    if len(self.onscreen) == 0: #
                         self.level.addtoValue()
+                        self.onscreen = self.array_backup
+                        for block in self.onscreen:
+                            block.hit = False
+                            self.ball.setmiddle()
+                        next_level = True
                         continue
 
                     self.player.move(self.window.getKeys())
@@ -116,9 +135,10 @@ class Game:
 
             self.window.clearscreen()
 
-            if self.level.getvalue() == 1 and self.lives.getvalue() > 0 and not halt:
+            if self.level.getvalue() >= 1 and self.lives.getvalue() > 0 and not halt:
                 for block in self.onscreen:
                     self.window.blitSprite(block)
+
             for item in self.misc:
                 self.window.blitSprite(item)
             self.window.updatescreen()

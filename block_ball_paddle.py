@@ -13,6 +13,9 @@ class Block(Sprite):
         self.hit = False
 
     # -- Modify Method
+    def blockmoves(self, level,direction):
+        if level > 1:
+            self.setPOS(self.getX()+(direction*3), self.getY())
 
     def checkCollision(self,ball):
         if self.sprite.get_rect(x=self.x, y=self.y).colliderect(ball.getSprite().get_rect(x=ball.getX(), y=ball.getY())):
@@ -80,8 +83,8 @@ class Ball(Sprite):
         self.setPOS(self.window.getWidth()/2 - self.getWidth()/2 , 550)
 
     def randomdirection(self):
-        self.dirX = randrange(-1, 2, 2)
-        self.dirY = randrange(-1, 2, 2)
+        self.dirX = randrange(-1, 2, 2) # Either Left or Right
+        self.dirY = -1
 
 class Paddle(Sprite):
     def __init__(self, window,color):

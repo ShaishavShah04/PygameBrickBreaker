@@ -14,21 +14,21 @@ class Text(Sprite):
         Sprite.__init__(self,window,x,y)
         self.value = value
         self.phrase = phrase
-        self.content = phrase + str(self.value)
+        self.content = phrase + str(self.value) # For things such as "Level: X"
         self.fontFam = fontFam
         self.fontSize = fontsize
         self.color = WHITE
         self.font =  font.SysFont(self.fontFam, self.fontSize)
         self.sprite = self.font.render(self.content,1,self.color)
 
-    # Modify #-- Only for levels text
+    # Modify #-- Only for certain scenarios
 
-    def addtoValue(self):
+    def add_to_Value(self):
         self.value += 1
         self.content = self.phrase + str(self.value)
         self.sprite = self.font.render(self.content,1,self.color)
 
-    def removefromValue(self):
+    def remove_from_Value(self):
         self.value -= 1
         self.content = self.phrase + str(self.value)
         self.sprite = self.font.render(self.content,1,self.color)

@@ -3,7 +3,6 @@
 """
 Engine for gluing all the things togather... This will also incorporate levels
 """
-from typing import List
 
 from window import Window
 from block_ball_paddle import Block, Ball, Paddle
@@ -32,6 +31,8 @@ class Game:
         self.nextlevel = Text("Press Space for next level",self.window)
         self.nextlevel.setPOS(self.window.getWidth()/2 - self.nextlevel.getWidth() , self.window.getHeight() - (2*self.nextlevel.getHeight()))
         # Creating Blocks
+        self.createblocks()
+        """
         for i in range(6):
             for j in range(6):
                 temp_starting_array = [100, 50]
@@ -39,8 +40,9 @@ class Game:
                 self.onscreen.append(Block(self.window,50,100))
                 self.onscreen[-1].setPOS(temp_starting + (j * 105) ,60 + (i*55))
                 self.onscreen[-1].setColor(blockcolors[i])
+        """
         # Back up array with blocks
-        self.array_backup = self.onscreen[:]
+        # self.array_backup = self.onscreen.copy()
         # Creating sprites
         self.ball = Ball(self.window, 15)
         self.ball.setmiddle() # setting ball in starting spot
@@ -53,12 +55,21 @@ class Game:
     def intro(self):
         if self.chkspace(self.window.getKeys()):
             self.misc.pop()
-            self.level.addtoValue()
+            self.level.add_to_Value()
+
+    def createblocks(self):
+        for i in range(6):
+            for j in range(6):
+                temp_starting_array = [100, 50]
+                temp_starting = temp_starting_array[i%2]
+                self.onscreen.append(Block(self.window,50,100))
+                self.onscreen[-1].setPOS(temp_starting + (j * 105) ,60 + (i*55))
+                self.onscreen[-1].setColor(blockcolors[i])
 
     def run(self):
         ## Var
         halt = False
-        max_move = 5
+        max_move = 15
         move = [-1,1]
         next_level = False
         while True:
@@ -80,7 +91,10 @@ class Game:
                         self.ball.randomdirection()
                         self.misc = [self.ball, self.player, self.title, self.level,self.score,self.lives]
                         halt = False
+
                 elif next_level:
+                    self.player.setDimensions(100 - (20*self.level.getvalue()),10)
+                    self.player.setPOS(self.window.getWidth() / 2 - self.player.getWidth() / 2, self.window.getHeight() - (2 * self.player.getHeight()))
                     self.misc = [self.ball, self.player, self.title, self.level,self.score,self.lives, self.nextlevel]
                     if self.chkspace(self.window.getKeys()):
                         self.ball.randomdirection()
@@ -90,13 +104,13 @@ class Game:
                     # Move blocks around for level 2
                     if self.level.getvalue() >= 2:
                         for block in self.onscreen:
-                            block.blockmoves(self.level.getvalue(),move[(max_move//10)%2])
+                            block.blockmoves(self.level.getvalue(),move[(max_move//30)%2])
                         max_move += 1
 
                     # Bounce and checking for losing a life
                     bounce = self.ball.bouncearound(bounce)
                     if bounce == -1:
-                        self.lives.removefromValue()
+                        self.lives.remove_from_Value()
                         if self.lives.getvalue() == 0:
                             continue
                         self.ball.setmiddle()
@@ -105,9 +119,9 @@ class Game:
 
 
                     for block in self.onscreen:
-                        bounce = block.checkCollision2(self.ball)
+                        bounce = block.checkCollision(self.ball)
                         if block.hit:
-                            self.score.addtoValue()
+                            self.score.add_to_Value()
                             if bounce == 1:
                                 self.ball.bouncehorizontal()
                             elif bounce == 2:
@@ -118,8 +132,8 @@ class Game:
                             self.onscreen.remove(block)
 
                     if len(self.onscreen) == 0: #
-                        self.level.addtoValue()
-                        self.onscreen = self.array_backup
+                        self.level.add_to_Value()
+                        self.createblocks()
                         for block in self.onscreen:
                             block.hit = False
                             self.ball.setmiddle()
@@ -127,8 +141,11 @@ class Game:
                         continue
 
                     self.player.move(self.window.getKeys())
-                    if self.player.checkCollision(self.ball):
+
+                    if 1 == self.player.checkCollision(self.ball): # Hits the top flat surface of paddle
                         self.ball.bouncevertical()
+                    elif 2 == self.player.checkCollision(self.ball): # Hits the side of paddle... So technically doesnt bounce ball back up... Will lose a life
+                        self.ball.bouncehorizontal()
 
 
             # Outputs

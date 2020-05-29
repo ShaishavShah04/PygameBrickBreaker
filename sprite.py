@@ -7,7 +7,7 @@ from pygame import Surface, SRCALPHA
 
 class Sprite:
 
-    def __init__(self,window,x = 0, y = 0,color = (255,255,255)):
+    def __init__(self,window,x = 0, y = 0,color = (255,255,255)): # Default white color
         self.width = 100
         self.height = 100
         self.dimensions = (self.width,self.height)
@@ -24,7 +24,7 @@ class Sprite:
     def updateSprite(self):
         self.dimensions = (self.width, self.height)
         self.sprite = Surface(self.dimensions, SRCALPHA, 32)
-        self.sprite.fill(self.color)
+        self.sprite.fill(self.color) # For color
 
     def setWidth(self, w):
         self.width = w
@@ -61,7 +61,7 @@ class Sprite:
     def getSprite(self):
         return self.sprite
 
-    def getRect(self):
+    def getRect(self): # Makes the collisions a bit easier to code
         return self.sprite.get_rect(x=self.x, y=self.y)
 
     def getPOS(self):

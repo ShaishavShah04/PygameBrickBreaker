@@ -11,12 +11,14 @@ import pygame
 
 class Window:
     def __init__(self):
+        # Loader values
         self.title = TITLE
         self.fps = FPS
         self.height = HEIGHT
         self.width = WIDTH
         self.screenDimensions = (self.width, self.height)
         self.background = GREY
+        #
         self.frame = pygame.time.Clock()
         self.screen = pygame.display.set_mode(self.screenDimensions)
         self.screen.fill(self.background)
@@ -25,7 +27,7 @@ class Window:
 
     # --- Modify
 
-    def run(self):
+    def run(self): # Only for testing.... Not in the actual engine
         while True:
             # --- Inputs
             self.getEvents()

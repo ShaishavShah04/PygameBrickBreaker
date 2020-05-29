@@ -3,6 +3,11 @@
 
 """
 Classes for block, paddle, and ball
+
+Things shown:
+- Inheritance from abstract class sprite
+- Polymorphism: Getter Methods return different results based on object. Eg. Object.getX() != Object2.getX()
+- Aggre
 """
 
 from window import Window
@@ -15,7 +20,7 @@ class Block(Sprite):
     def __init__(self,window,height,width):
         Sprite.__init__(self,window)
         self.setDimensions(width,height)
-        self.hit = False # Variable to see if it is hit or not
+        self.__hit = False # Variable to see if it is hit or not
 
     # -- Modify Method
     def blockmoves(self, level,direction): # For the shake effect in level 2
@@ -43,7 +48,7 @@ class Block(Sprite):
 
         # Collisions
         if self.getRect().colliderect(ball.getRect()): # If any overlap between block and ball
-            self.hit = True # Set block to disappear
+            self.getHit() # Set block to disappear
             # Variables inside if-statement to save memory
             t_l = (ball.getX(), ball.getY())  # Top left corner
             t_r = (ball.getX() + ball.getWidth(), ball.getY())
@@ -58,9 +63,13 @@ class Block(Sprite):
             else:
                 return 2 # Top/Bottom
 
+    def getHit(self):
+        self.__hit = True
+
+
     # -- Getter Method
     def checkHit(self):
-        return self.hit
+        return self.__hit
 
 
 class Ball(Sprite):
@@ -109,7 +118,7 @@ class Ball(Sprite):
             self.x = 0
             self.dirX = 1
         #
-        if self.y > self.window.getHeight() - self.height:
+        if self.y >= self.window.getHeight() - self.height:
             self.y = self.window.getHeight() - self.height
             self.dirY = -1
             return -1 # Look at description above
@@ -162,17 +171,17 @@ class Paddle(Sprite):
         self.pos = (self.x, self.y)
 
     def checkCollision(self,ball):
-        if self.sprite.get_rect(x=self.x, y=self.y).colliderect(ball.getSprite().get_rect(x=ball.getX(), y=ball.getY())):
+        if self.sprite.get_rect(x=self.x, y=self.y).colliderect(ball.getSprite().get_rect(x=ball.getX(), y=ball.getY())): # If overlap
             #
             b_r = (ball.getX() + ball.getWidth(), ball.getY() + ball.getHeight())
             b_l = (ball.getX(), ball.getY() + ball.getHeight())
             #
-            if b_l[0] <= (self.getX()+self.getWidth()) and b_r[0] >= self.getX():
-                return 1
+            if b_l[0] <= (self.getX()+self.getWidth()) and b_r[0] >= self.getX() and b_l[1] <= self.getY() + 5: # and if ball is on top of the paddle
+                return 1 # Bounce vertically
             else:
-                return 2
+                return 2 # Bounce horizontally
         else:
-            return 0
+            return 0 # Don't bounce
 
 
 

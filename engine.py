@@ -2,6 +2,9 @@
 # 2020-05-26
 """
 Engine for gluing all the things togather... This will also incorporate levels
+
+Things Shown:
+- Aggregation: When creating class of ball, paddle, and text, they mostly use self.window as a parameter.
 """
 
 from window import Window
@@ -17,7 +20,7 @@ class Game:
         self.window = Window()
         self.onscreen = []
         # Text and Positions
-        self.lives = Text(LIVES,self.window,phrase="Lives: ")
+        self.lives = Text(LIVES,self.window,phrase="Lives: ") # Aggregation
         self.lives.setPOS(self.window.getWidth() - self.lives.getWidth(), 10)
         self.score = Text(0,self.window,10,self.window.getHeight() - 30,"Score: ")
         self.title = Text("Brick-Breaker!",self.window)
@@ -120,7 +123,7 @@ class Game:
 
                     for block in self.onscreen:
                         bounce = block.checkCollision(self.ball)
-                        if block.hit:
+                        if block.checkHit():
                             self.score.add_to_Value()
                             if bounce == 1:
                                 self.ball.bouncehorizontal()

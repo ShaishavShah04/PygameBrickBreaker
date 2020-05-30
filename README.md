@@ -23,6 +23,7 @@ For the side collisions (right side collision in the image), I would test to see
 #### Special Features
 
 In comparision to the regular brick breaker, my variant adds some special things to improve the gameplay. 
+
 1) Never ending game play
 
 In my variant of the game, the player is not limited by the game's lack of levels, instead they are only limited by their own skill. There are unlimited levels (of which only up to level 3 has been tested as I can't get further)! This means the levels aren't hard coded into the gameplay, instead they are placed into a loop to make every level different.

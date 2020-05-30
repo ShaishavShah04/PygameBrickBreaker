@@ -7,7 +7,7 @@ Classes for block, paddle, and ball
 Things shown:
 - Inheritance from abstract class sprite
 - Polymorphism: Getter Methods return different results based on object. Eg. Object.getX() != Object2.getX()
-- Aggre
+- Encapsulation: self.__hit. This is a private variable and can only be accessed via the class functions
 """
 
 from window import Window
@@ -44,7 +44,9 @@ class Block(Sprite):
                     return 2
         """ # Old collisions
 
-    def checkCollision(self,ball):
+    # Getter Methods
+
+    def checkCollision(self,ball): # (Overall getter methods apart from the self.getHit()
 
         # Collisions
         if self.getRect().colliderect(ball.getRect()): # If any overlap between block and ball
@@ -73,6 +75,7 @@ class Block(Sprite):
 
 
 class Ball(Sprite):
+
     def __init__(self,window,size):
         Sprite.__init__(self,window)
         self.setDimensions(size,size)
@@ -80,6 +83,7 @@ class Ball(Sprite):
         self.dirY = randrange(-1,2,2)
         self.speed = 5
 
+    # Modify Methods
 
     def moveWASD(self,keypresses): # USED for testing
         if keypresses[K_d] == 1:
@@ -147,6 +151,7 @@ class Ball(Sprite):
         self.dirX = randrange(-1, 2, 2) # Either Left or Right
         self.dirY = -1
 
+
 class Paddle(Sprite):
     def __init__(self, window,color):
         Sprite.__init__(self,window,color=color)
@@ -169,6 +174,8 @@ class Paddle(Sprite):
             self.x = 0
 
         self.pos = (self.x, self.y)
+
+    # -- Getter Methods
 
     def checkCollision(self,ball):
         if self.sprite.get_rect(x=self.x, y=self.y).colliderect(ball.getSprite().get_rect(x=ball.getX(), y=ball.getY())): # If overlap

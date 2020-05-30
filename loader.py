@@ -10,6 +10,8 @@ FPS = 30
 WIDTH = 800
 HEIGHT = 600
 LIVES = 3
+
+
 # Colors
 
 WHITE = (255,255,255)

@@ -18,5 +18,40 @@ Refer to this picture for the brief explaination:
 
 <img src="Images/explain2.png" width="200">
 
-For the side collisions (right side collision in the image), I would test to see if the ball was completely in the pink shaded area. How? Notice the top left and bottom left corners of the ball have specific colors. In order to confirm the ball was in the shaded area, I would check if the **green** point was _above_ **the green line** and if the **yellow point** was _below_ the **yellow line**. Furthermore, we would make sure both of these points were touching the blocks right edge. If these conditions were met, I could be sure that the ball has touched the right edge of the block.
+For the side collisions (right side collision in the image), I would test to see if the ball was completely in the pink shaded area. How? First I would test to see if the ball and the block had collided anywhere. Notice the top left and bottom left corners of the ball have specific colors. In order to confirm the ball was in the shaded area, I would check if the **green** point was _above_ **the green line** and if the **yellow point** was _below_ the **yellow line**. Furthermore, we would make sure both of these points were touching the blocks right edge. If these conditions were met, I could be sure that the ball has touched the right edge of the block.
 
+#### Special Features
+
+In comparision to the regular brick breaker, my variant adds some special things to improve the gameplay. 
+1) Never ending game play
+
+    In my variant of the game, the player is not limited by the game's lack of levels, instead they are only limited by their own skill. There are unlimited levels (of which only up to level 3 has been tested as I can't get further)! This means the levels aren't hard coded into the gameplay, instead they are placed into a loop to make every level different.
+    
+2) Lives
+
+    For players like me, who aren't great at this game, having multiple lives is a great feature. This allows for slight errors when playing and not having to start over.
+    
+#### How to run program!
+
+##### Pre-requisites
+
+ - You MUST have python installed onto your machine
+    - If you, don't have python, install it from "https://www.python.org/downloads/"
+ 
+ 1) Installing pygame
+ 
+ Check if you already have the pygame module by openning up Command Prompt and typing `pip show pygame`. If it prints out the information, you are good to go. If it does not give information on the module, install it by typing `pip install pygame`.
+ 
+ 2) Running program
+ 
+ Open the folder with the files inside (where the files are stores from your download from Git). 
+ 
+ Now in the file explorer, in the navigation bar, type in `CMD` like shown below:
+ 
+ <img src="Images/cmd.jpg" width="200">
+ 
+ Hit enter and command prompt should launch from that folder.
+ 
+ Now simply type `python main.py`
+ 
+ Brick - Breaker should be running!

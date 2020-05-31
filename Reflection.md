@@ -10,4 +10,8 @@ The challenging part would be collision. It required thinking of what specific p
 
 Note / Question -
 
+- The inheritance, aggregation, polymophrism, etc is all in the file first few lines of the files.
+    - block_ball_paddle.py has Inheritance, Polymorphism, Encapsulation.
+    - engine.py has Aggregation
+
 In the flow chart, how do we represent an END for this program. There is no specific Exit button or win scenario in my game... The only way of exiting is to hit the close button.

@@ -27,7 +27,7 @@ class Block(Sprite):
         if level > 1:
             self.setPOS(self.getX()+(direction*2), self.getY())
 
-        """
+    """
         def checkCollision(self,ball):
             if self.sprite.get_rect(x=self.x, y=self.y).colliderect(ball.getSprite().get_rect(x=ball.getX(), y=ball.getY())):
                 self.hit = True
@@ -44,9 +44,14 @@ class Block(Sprite):
                     return 2
         """ # Old collisions
 
+    # Modify Methods
+
+    def getHit(self):
+        self.__hit = True
+
     # Getter Methods
 
-    def checkCollision(self,ball): # (Overall getter methods apart from the self.getHit()
+    def checkCollision(self, ball): # (Overall getter methods apart from the self.getHit()
 
         # Collisions
         if self.getRect().colliderect(ball.getRect()): # If any overlap between block and ball
@@ -65,11 +70,6 @@ class Block(Sprite):
             else:
                 return 2 # Top/Bottom
 
-    def getHit(self):
-        self.__hit = True
-
-
-    # -- Getter Method
     def checkHit(self):
         return self.__hit
 

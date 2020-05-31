@@ -8,6 +8,9 @@ Things shown:
 - Inheritance from abstract class sprite
 - Polymorphism: Getter Methods return different results based on object. Eg. Object.getX() != Object2.getX()
 - Encapsulation: self.__hit. This is a private variable and can only be accessed via the class functions
+
+Note:
+    In all my collision testings, the range of acceptance is + / - the ball's speed as without it, some bounces will not be registed
 """
 
 from window import Window
@@ -63,9 +66,9 @@ class Block(Sprite):
             b_l = (ball.getX(), ball.getY() + ball.getHeight())
             # Collision testing
 
-            if t_l[0] >= (self.getX() + self.getWidth() - 5) and b_l[0] >= (self.getX() + self.getWidth() - 5) and t_l[1] <= (self.getY()+ self.getHeight()+5) and b_l[1] >= (self.getY() - 5): # Left edge collision
+            if t_l[0] >= (self.getX() + self.getWidth() - ball.speed) and b_l[0] >= (self.getX() + self.getWidth() - ball.speed) and t_l[1] <= (self.getY()+ self.getHeight()+ball.speed) and b_l[1] >= (self.getY() - ball.speed): # Left edge collision
                 return 1 # Left
-            elif t_r[0] <= (self.getX()+5) and b_r[0] <= (self.getX()+5) and t_r[1] <= (self.getY()+ self.getHeight()+5) and b_r[1] >= (self.getY() - 5):
+            elif t_r[0] <= (self.getX()+ball.speed) and b_r[0] <= (self.getX()+ball.speed) and t_r[1] <= (self.getY()+ self.getHeight()+ball.speed) and b_r[1] >= (self.getY() - ball.speed):
                 return 1 # Right
             else:
                 return 2 # Top/Bottom
@@ -80,7 +83,7 @@ class Ball(Sprite):
         Sprite.__init__(self,window)
         self.setDimensions(size,size)
         self.dirX = randrange(-1,2,2) # Randomize direction
-        self.dirY = randrange(-1,2,2)
+        self.dirY = -1
         self.speed = 5
 
     # Modify Methods
@@ -145,7 +148,7 @@ class Ball(Sprite):
         self.bouncehorizontal()
 
     def setmiddle(self): # For restarts / new level / life lost
-        self.setPOS(self.window.getWidth()/2 - self.getWidth()/2 , 550)
+        self.setPOS(self.window.getWidth()/2 - self.getWidth()/2 , randrange(530,561,1))
 
     def randomdirection(self): # After restart
         self.dirX = randrange(-1, 2, 2) # Either Left or Right
@@ -183,7 +186,7 @@ class Paddle(Sprite):
             b_r = (ball.getX() + ball.getWidth(), ball.getY() + ball.getHeight())
             b_l = (ball.getX(), ball.getY() + ball.getHeight())
             #
-            if b_l[0] <= (self.getX()+self.getWidth()) and b_r[0] >= self.getX() and b_l[1] <= self.getY() + 5: # and if ball is on top of the paddle
+            if b_l[0] <= (self.getX()+self.getWidth()) and b_r[0] >= self.getX() and b_l[1] <= self.getY() + ball.speed: # and if ball is on top of the paddle
                 return 1 # Bounce vertically
             else:
                 return 2 # Bounce horizontally

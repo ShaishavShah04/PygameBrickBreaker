@@ -83,6 +83,7 @@ class Game:
 
             ## Processing
             if self.level.getvalue() == 0  and self.lives.getvalue() != 0: # Start Game
+
                 self.intro()
 
             elif self.level.getvalue() != 0 and self.lives.getvalue() == 0: # Game Over
@@ -91,16 +92,9 @@ class Game:
 
                 if self.chkspace(self.window.getKeys()) or self.chk_y(self.window.getKeys()): # Play again
                     # Reset variables
-                    self.misc = [self.ball, self.player, self.title, self.level,self.score,self.lives]
-                    self.onscreen = []
-                    self.createblocks()
-                    self.ball.setmiddle()
-                    self.player.setPOS(self.window.getWidth() / 2 - self.player.getWidth() / 2, self.window.getHeight() - (2 * self.player.height))
                     halt = False
                     next_level = False
-                    self.level.change_value_to(1)
-                    self.score.change_value_to(0)
-                    self.lives.change_value_to(3)
+                    self.resetgame()
                     continue
 
             elif self.level.getvalue() >= 1 and self.lives.getvalue() > 0: # Levels / Gameplay
@@ -181,6 +175,19 @@ class Game:
 
             self.window.updatescreen()
 
+    def resetgame(self):
+        self.misc = [self.ball, self.player, self.title, self.level, self.score, self.lives]
+        self.onscreen = []
+        self.createblocks()
+        self.ball.setmiddle()
+        self.player.setPOS(self.window.getWidth() / 2 - self.player.getWidth() / 2,self.window.getHeight() - (2 * self.player.height))
+        self.level.change_value_to(1)
+        self.score.change_value_to(0)
+        self.lives.change_value_to(3)
+
+
+    # Getter
+
     def chkspace(self,keys):
         if keys[K_SPACE] == 1:
             return True
@@ -188,3 +195,4 @@ class Game:
     def chk_y(self,keys):
         if keys[K_y] == 1:
             return True
+

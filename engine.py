@@ -91,8 +91,7 @@ class Game:
 
                 if self.chkspace(self.window.getKeys()) or self.chk_y(self.window.getKeys()): # Play again
                     # Reset variables
-                    self.misc.pop()
-                    self.misc.pop()
+                    self.misc = [self.ball, self.player, self.title, self.level,self.score,self.lives]
                     self.onscreen = []
                     self.createblocks()
                     self.ball.setmiddle()
